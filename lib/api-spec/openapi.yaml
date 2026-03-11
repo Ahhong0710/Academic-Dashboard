@@ -1,22 +1,26 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Class Routine Manager API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: timetable
+    description: Timetable / class schedule
+  - name: assignments
+    description: Assignment deadlines
+  - name: resources
+    description: Technical resources (links)
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +28,217 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /timetable:
+    get:
+      operationId: getTimetable
+      tags: [timetable]
+      summary: Get all timetable entries
+      responses:
+        "200":
+          description: List of timetable entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TimetableEntry"
+    post:
+      operationId: createTimetableEntry
+      tags: [timetable]
+      summary: Create a timetable entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTimetableEntry"
+      responses:
+        "201":
+          description: Created entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimetableEntry"
+
+  /timetable/{id}:
+    put:
+      operationId: updateTimetableEntry
+      tags: [timetable]
+      summary: Update a timetable entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTimetableEntry"
+      responses:
+        "200":
+          description: Updated entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimetableEntry"
+    delete:
+      operationId: deleteTimetableEntry
+      tags: [timetable]
+      summary: Delete a timetable entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /assignments:
+    get:
+      operationId: getAssignments
+      tags: [assignments]
+      summary: Get all assignments
+      responses:
+        "200":
+          description: List of assignments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Assignment"
+    post:
+      operationId: createAssignment
+      tags: [assignments]
+      summary: Create an assignment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAssignment"
+      responses:
+        "201":
+          description: Created assignment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Assignment"
+
+  /assignments/{id}:
+    put:
+      operationId: updateAssignment
+      tags: [assignments]
+      summary: Update an assignment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAssignment"
+      responses:
+        "200":
+          description: Updated assignment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Assignment"
+    delete:
+      operationId: deleteAssignment
+      tags: [assignments]
+      summary: Delete an assignment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /resources:
+    get:
+      operationId: getResources
+      tags: [resources]
+      summary: Get all technical resources
+      responses:
+        "200":
+          description: List of resources
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Resource"
+    post:
+      operationId: createResource
+      tags: [resources]
+      summary: Create a resource
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateResource"
+      responses:
+        "201":
+          description: Created resource
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Resource"
+
+  /resources/{id}:
+    put:
+      operationId: updateResource
+      tags: [resources]
+      summary: Update a resource
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateResource"
+      responses:
+        "200":
+          description: Updated resource
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Resource"
+    delete:
+      operationId: deleteResource
+      tags: [resources]
+      summary: Delete a resource
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +249,151 @@ components:
       required:
         - status
 
+    TimetableEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+        courseName:
+          type: string
+        courseCode:
+          type: string
+        instructor:
+          type: string
+        dayOfWeek:
+          type: string
+          enum: [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday]
+        startTime:
+          type: string
+        endTime:
+          type: string
+        room:
+          type: string
+        color:
+          type: string
+      required:
+        - id
+        - courseName
+        - dayOfWeek
+        - startTime
+        - endTime
+
+    CreateTimetableEntry:
+      type: object
+      properties:
+        courseName:
+          type: string
+        courseCode:
+          type: string
+        instructor:
+          type: string
+        dayOfWeek:
+          type: string
+          enum: [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday]
+        startTime:
+          type: string
+        endTime:
+          type: string
+        room:
+          type: string
+        color:
+          type: string
+      required:
+        - courseName
+        - dayOfWeek
+        - startTime
+        - endTime
+
+    Assignment:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        courseName:
+          type: string
+        dueDate:
+          type: string
+          format: date-time
+        description:
+          type: string
+        status:
+          type: string
+          enum: [pending, in_progress, completed]
+        priority:
+          type: string
+          enum: [low, medium, high]
+      required:
+        - id
+        - title
+        - courseName
+        - dueDate
+        - status
+        - priority
+
+    CreateAssignment:
+      type: object
+      properties:
+        title:
+          type: string
+        courseName:
+          type: string
+        dueDate:
+          type: string
+          format: date-time
+        description:
+          type: string
+        status:
+          type: string
+          enum: [pending, in_progress, completed]
+        priority:
+          type: string
+          enum: [low, medium, high]
+      required:
+        - title
+        - courseName
+        - dueDate
+        - status
+        - priority
+
+    Resource:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        url:
+          type: string
+        type:
+          type: string
+          enum: [github, colab, docs, other]
+        courseName:
+          type: string
+        description:
+          type: string
+      required:
+        - id
+        - title
+        - url
+        - type
+
+    CreateResource:
+      type: object
+      properties:
+        title:
+          type: string
+        url:
+          type: string
+        type:
+          type: string
+          enum: [github, colab, docs, other]
+        courseName:
+          type: string
+        description:
+          type: string
+      required:
+        - title
+        - url
+        - type

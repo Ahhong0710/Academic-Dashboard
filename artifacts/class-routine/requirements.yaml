@@ -1,0 +1,16 @@
+packages:
+  "framer-motion": "For smooth page transitions and micro-interactions"
+  "date-fns": "For elegant date formatting and live countdown logic"
+  "react-hook-form": "For robust form state management"
+  "@hookform/resolvers": "For Zod form validation integration"
+  "zod": "For strict schema validation matching OpenAPI"
+  "clsx": "For conditional tailwind class merging"
+  "tailwind-merge": "For conflict-free tailwind class merging"
+  "lucide-react": "For clean, consistent iconography"
+
+images: []
+
+notes:
+  - "The app relies on @workspace/api-client-react for TanStack Query hooks based on the OpenAPI spec."
+  - "Using wouter for fast, lightweight routing."
+  - "Forms manage both creation and editing states through a unified dialog component per resource."
