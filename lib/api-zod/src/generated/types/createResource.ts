@@ -13,4 +13,6 @@ export interface CreateResource {
   type: CreateResourceType;
   courseName?: string;
   description?: string;
+  filePath?: string;
+  fileName?: string;
 }

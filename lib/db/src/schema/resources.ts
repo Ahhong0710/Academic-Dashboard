@@ -9,6 +9,8 @@ export const resourcesTable = pgTable("resources", {
   type: varchar("type", { length: 20 }).notNull().default("other"),
   courseName: text("course_name"),
   description: text("description"),
+  filePath: text("file_path"),
+  fileName: text("file_name"),
 });
 
 export const insertResourceSchema = createInsertSchema(resourcesTable).omit({ id: true });

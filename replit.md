@@ -16,6 +16,14 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - **API codegen**: Orval (from OpenAPI spec)
 - **Build**: esbuild (CJS bundle)
 
+## Features
+
+- **Class Routine Manager** at `/` (react-vite artifact)
+  - Dashboard: today's classes + upcoming deadlines + quick resources
+  - Timetable: weekly class schedule with color-coded cards, add/edit/delete
+  - Assignments: deadline list with live countdown timers, priority badges, status tracking
+  - Resources: link cards (GitHub, Colab, Docs, Other) with **PDF/PPT file upload** via object storage
+
 ## Structure
 
 ```text

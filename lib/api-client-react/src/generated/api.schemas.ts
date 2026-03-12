@@ -129,6 +129,10 @@ export interface Resource {
   type: ResourceType;
   courseName?: string;
   description?: string;
+  /** Object storage path for uploaded file (e.g. /objects/uploads/uuid) */
+  filePath?: string;
+  /** Original uploaded file name */
+  fileName?: string;
 }
 
 export type CreateResourceType =
@@ -147,4 +151,24 @@ export interface CreateResource {
   type: CreateResourceType;
   courseName?: string;
   description?: string;
+  filePath?: string;
+  fileName?: string;
+}
+
+export interface UploadUrlRequest {
+  /** @minLength 1 */
+  name: string;
+  /** @minimum 1 */
+  size: number;
+  /** @minLength 1 */
+  contentType: string;
+}
+
+export interface UploadUrlResponse {
+  uploadURL: string;
+  objectPath: string;
+}
+
+export interface ErrorEnvelope {
+  error: string;
 }

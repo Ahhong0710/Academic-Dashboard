@@ -14,4 +14,8 @@ export interface Resource {
   type: ResourceType;
   courseName?: string;
   description?: string;
+  /** Object storage path for uploaded file (e.g. /objects/uploads/uuid) */
+  filePath?: string;
+  /** Original uploaded file name */
+  fileName?: string;
 }

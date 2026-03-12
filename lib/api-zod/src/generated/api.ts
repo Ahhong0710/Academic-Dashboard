@@ -182,6 +182,13 @@ export const GetResourcesResponseItem = zod.object({
   type: zod.enum(["github", "colab", "docs", "other"]),
   courseName: zod.string().optional(),
   description: zod.string().optional(),
+  filePath: zod
+    .string()
+    .optional()
+    .describe(
+      "Object storage path for uploaded file (e.g. \/objects\/uploads\/uuid)",
+    ),
+  fileName: zod.string().optional().describe("Original uploaded file name"),
 });
 export const GetResourcesResponse = zod.array(GetResourcesResponseItem);
 
@@ -194,6 +201,8 @@ export const CreateResourceBody = zod.object({
   type: zod.enum(["github", "colab", "docs", "other"]),
   courseName: zod.string().optional(),
   description: zod.string().optional(),
+  filePath: zod.string().optional(),
+  fileName: zod.string().optional(),
 });
 
 /**
@@ -209,6 +218,8 @@ export const UpdateResourceBody = zod.object({
   type: zod.enum(["github", "colab", "docs", "other"]),
   courseName: zod.string().optional(),
   description: zod.string().optional(),
+  filePath: zod.string().optional(),
+  fileName: zod.string().optional(),
 });
 
 export const UpdateResourceResponse = zod.object({
@@ -218,6 +229,13 @@ export const UpdateResourceResponse = zod.object({
   type: zod.enum(["github", "colab", "docs", "other"]),
   courseName: zod.string().optional(),
   description: zod.string().optional(),
+  filePath: zod
+    .string()
+    .optional()
+    .describe(
+      "Object storage path for uploaded file (e.g. \/objects\/uploads\/uuid)",
+    ),
+  fileName: zod.string().optional().describe("Original uploaded file name"),
 });
 
 /**
@@ -225,4 +243,26 @@ export const UpdateResourceResponse = zod.object({
  */
 export const DeleteResourceParams = zod.object({
   id: zod.coerce.number(),
+});
+
+/**
+ * @summary Request a presigned URL for file upload
+ */
+
+export const RequestUploadUrlBody = zod.object({
+  name: zod.string().min(1),
+  size: zod.number().min(1),
+  contentType: zod.string().min(1),
+});
+
+export const RequestUploadUrlResponse = zod.object({
+  uploadURL: zod.string().url(),
+  objectPath: zod.string(),
+});
+
+/**
+ * @summary Serve an uploaded object
+ */
+export const GetStorageObjectParams = zod.object({
+  objectPath: zod.coerce.string(),
 });
