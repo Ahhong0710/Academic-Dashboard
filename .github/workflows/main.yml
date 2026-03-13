@@ -1,0 +1,31 @@
+name: Deploy Dashboard
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write # 这一行是关键，强制开启写入权限
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+        env:
+          COREPACK_ENABLE_STRICT: 0
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
+          branch: gh-pages # 明确指定推送到这个分支
