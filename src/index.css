@@ -1,8 +1,1 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* 顺便加个背景色，方便测试 */
-body {
-  @apply bg-gray-100;
-}
+@import "tailwindcss";
