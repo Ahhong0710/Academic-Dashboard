@@ -15,12 +15,15 @@ jobs:
           version: 10
 
       - name: Install dependencies
-        run: pnpm install
+        # 增加环境变量强制关闭 frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
+        env:
+          COREPACK_ENABLE_STRICT: 0
 
       - name: Build
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm run build
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: dist # Vite 编译后的文件夹
+          folder: dist
