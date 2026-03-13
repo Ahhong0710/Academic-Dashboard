@@ -1,142 +1,143 @@
-import React, { useState } from 'react';
-import { LayoutDashboard, Plus, Trash2, Cpu, Briefcase, TrendingUp, CheckCircle2, Clock } from 'lucide-react';
+import { useState } from 'react'
+import { LayoutDashboard, CalendarDays, ClipboardList, BookOpen, LogOut, Search, Bell } from 'lucide-react'
 
-const App = () => {
-  // 动态状态：管理你的任务清单
-  const [tasks, setTasks] = useState([
-    { id: 1, text: 'PID Controller Report', category: 'Academic' },
-    { id: 2, text: 'Update Internship Resume', category: 'Career' }
-  ]);
-  const [inputValue, setInputValue] = useState('');
+// 定义页面类型
+type Page = 'Overview' | 'Timetable' | 'Assignments' | 'Resources';
 
-  // 添加任务的逻辑
-  const addTask = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputValue.trim()) return;
-    setTasks([...tasks, { id: Date.now(), text: inputValue, category: 'Personal' }]);
-    setInputValue('');
+function App() {
+  const [activePage, setActivePage] = useState<Page>('Overview');
+
+  // --- 模拟数据 (你可以在这里修改你的实际信息) ---
+  const studentInfo = {
+    name: "Ahhong0710",
+    major: "Mechatronics Engineering",
+    university: "USM",
+    cgpa: "3.71"
   };
 
-  // 删除任务的逻辑
-  const deleteTask = (id: number) => {
-    setTasks(tasks.filter(task => task.id !== id));
-  };
+  const navItems = [
+    { name: 'Overview', icon: LayoutDashboard },
+    { name: 'Timetable', icon: CalendarDays },
+    { name: 'Assignments', icon: ClipboardList },
+    { name: 'Resources', icon: BookOpen },
+  ];
 
-  return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-800 p-4 md:p-8 font-sans">
-      <div className="max-w-6xl mx-auto">
-        
-        {/* Header Section */}
-        <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
-          <div>
-            <h1 className="text-3xl font-black text-slate-900 tracking-tight">Academic Console</h1>
-            <p className="text-slate-500 font-medium">Mechatronics Engineering @ USM</p>
-          </div>
-          <div className="flex items-center gap-3 bg-white p-2 rounded-2xl shadow-sm border border-slate-100">
-            <div className="px-4 py-2 bg-indigo-50 rounded-xl">
-              <p className="text-[10px] text-indigo-400 font-bold uppercase tracking-wider">Target CGPA</p>
-              <p className="text-lg font-black text-indigo-600">3.71</p>
-            </div>
-            <div className="px-4 py-2 bg-emerald-50 rounded-xl text-right">
-              <p className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">System Status</p>
-              <p className="text-sm font-bold text-emerald-600 flex items-center gap-1 justify-end">● Online</p>
-            </div>
-          </div>
-        </header>
+  // --- 子页面组件 (你可以把它们拆分到独立文件中) ---
 
-        {/* Main Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-          
-          {/* 1. 动态任务添加 (占 5 列) */}
-          <div className="md:col-span-5 bg-white rounded-[2.5rem] border border-slate-100 p-8 shadow-xl shadow-slate-200/50">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold flex items-center gap-2"><CheckCircle2 className="text-indigo-500" /> Action Items</h2>
-              <span className="text-xs font-bold text-slate-400 bg-slate-100 px-3 py-1 rounded-full">{tasks.length} Total</span>
-            </div>
-            
-            <form onSubmit={addTask} className="relative mb-6">
-              <input 
-                type="text" 
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder="What needs to be done?"
-                className="w-full bg-slate-50 border-none rounded-2xl py-4 pl-6 pr-12 text-sm focus:ring-2 focus:ring-indigo-500 transition-all"
-              />
-              <button type="submit" className="absolute right-2 top-2 p-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors">
-                <Plus size={20} />
-              </button>
-            </form>
-
-            <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-              {tasks.map(task => (
-                <div key={task.id} className="group flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-transparent hover:border-indigo-100 hover:bg-white transition-all">
-                  <span className="text-sm font-medium text-slate-700">{task.text}</span>
-                  <button onClick={() => deleteTask(task.id)} className="text-slate-300 hover:text-red-500 transition-colors">
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* 2. 项目监控 (占 7 列) */}
-          <div className="md:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
-            
-            {/* 项目卡片 */}
-            <div className="bg-slate-900 rounded-[2.5rem] p-8 text-white flex flex-col justify-between group overflow-hidden relative">
-              <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform">
-                <Cpu size={80} />
-              </div>
-              <div className="relative z-10">
-                <p className="text-xs font-bold text-indigo-400 uppercase mb-2">Active Project</p>
-                <h3 className="text-xl font-bold leading-tight mb-4">Solar Panel Fault Detection</h3>
-                <div className="flex gap-2">
-                  <span className="text-[10px] bg-white/10 px-2 py-1 rounded-md">ResNet-50</span>
-                  <span className="text-[10px] bg-white/10 px-2 py-1 rounded-md">Computer Vision</span>
-                </div>
-              </div>
-              <button className="mt-8 text-sm font-bold flex items-center gap-2 hover:gap-3 transition-all">
-                Open Project <Plus size={16} />
-              </button>
-            </div>
-
-            {/* 实习倒计时 */}
-            <div className="bg-indigo-600 rounded-[2.5rem] p-8 text-white flex flex-col justify-between">
-              <div className="flex justify-between items-start">
-                <div className="p-3 bg-white/20 rounded-2xl"><Briefcase size={24} /></div>
-                <div className="text-right">
-                  <p className="text-[10px] font-bold text-indigo-200 uppercase">Start Date</p>
-                  <p className="text-xs font-bold">20 July 2026</p>
-                </div>
-              </div>
-              <div>
-                <p className="text-4xl font-black mb-1">128</p>
-                <p className="text-xs text-indigo-100 uppercase tracking-widest font-bold">Days to Intern</p>
-              </div>
-            </div>
-
-            {/* 投资卡片 */}
-            <div className="bg-white rounded-[2.5rem] border border-slate-100 p-8 shadow-xl shadow-slate-200/50 sm:col-span-2">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="p-4 bg-emerald-50 text-emerald-600 rounded-2xl"><TrendingUp /></div>
-                  <div>
-                    <h3 className="font-bold">Portfolio Strategy</h3>
-                    <p className="text-xs text-slate-400">Fixed Deposit & REITs</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="text-lg font-black text-slate-900">+4.2%</p>
-                  <p className="text-[10px] font-bold text-emerald-500 uppercase">Growth</p>
-                </div>
-              </div>
-            </div>
-
-          </div>
+  const OverviewPage = () => (
+    <div className="space-y-6">
+      <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-xl font-bold mb-4">Welcome back, {studentInfo.name}!</h2>
+        <p className="text-gray-600">Here's a quick look at your academic status.</p>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
+          <div className="p-3 bg-blue-100 text-blue-600 rounded-full"><LayoutDashboard size={24} /></div>
+          <div><p className="text-sm text-gray-500">Current CGPA</p><p className="text-2xl font-bold text-edu-primary">{studentInfo.cgpa}</p></div>
+        </div>
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
+          <div className="p-3 bg-green-100 text-green-600 rounded-full"><ClipboardList size={24} /></div>
+          <div><p className="text-sm text-gray-500">Upcoming Assignments</p><p className="text-2xl font-bold text-edu-secondary">3</p></div>
+        </div>
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
+          <div className="p-3 bg-yellow-100 text-yellow-600 rounded-full"><CalendarDays size={24} /></div>
+          <div><p className="text-sm text-gray-500">Next Class</p><p className="text-2xl font-bold text-yellow-600">Robotics @ 10AM</p></div>
         </div>
       </div>
     </div>
   );
-};
 
-export default App;
+  const TimetablePage = () => <div className="bg-white p-8 rounded-2xl shadow-sm">Timetable content here... (Week View)</div>;
+  const AssignmentsPage = () => <div className="bg-white p-8 rounded-2xl shadow-sm">Assignments content here... (Task List)</div>;
+  const ResourcesPage = () => <div className="bg-white p-8 rounded-2xl shadow-sm">Resources content here... (Course Materials)</div>;
+
+  // 根据当前页面状态渲染内容
+  const renderContent = () => {
+    switch (activePage) {
+      case 'Overview': return <OverviewPage />;
+      case 'Timetable': return <TimetablePage />;
+      case 'Assignments': return <AssignmentsPage />;
+      case 'Resources': return <ResourcesPage />;
+      default: return <OverviewPage />;
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex text-edu-text">
+      {/* --- Sidebar (左侧边栏) --- */}
+      <aside className="w-64 bg-white p-6 flex flex-col border-r border-gray-100 sticky top-0 h-screen">
+        <div className="flex items-center gap-3 mb-10">
+          <div className="w-10 h-10 bg-edu-primary rounded-xl flex items-center justify-center text-white font-bold text-xl">A</div>
+          <h1 className="text-xl font-bold">EduDash</h1>
+        </div>
+
+        <nav className="flex-grow space-y-3">
+          {navItems.map(item => (
+            <button
+              key={item.name}
+              onClick={() => setActivePage(item.name as Page)}
+              className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl text-left transition-colors duration-200 
+                ${activePage === item.name 
+                  ? 'bg-blue-50 text-edu-primary font-medium' 
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-edu-text'
+                }`}
+            >
+              <item.icon size={20} />
+              {item.name}
+            </button>
+          ))}
+        </nav>
+
+        <div className="mt-auto border-t border-gray-100 pt-6 space-y-4">
+          <div className="flex items-center gap-3">
+            <img src={`https://api.dicebear.com/8.x/initials/svg?seed=${studentInfo.name}`} alt="avatar" className="w-12 h-12 rounded-full border-2 border-gray-100" />
+            <div>
+              <p className="font-semibold text-sm">{studentInfo.name}</p>
+              <p className="text-xs text-gray-500">{studentInfo.major}</p>
+            </div>
+          </div>
+          <button className="w-full flex items-center gap-3 px-4 py-2 text-gray-500 hover:text-red-500 rounded-lg text-sm transition-colors">
+            <LogOut size={18} />
+            Logout
+          </button>
+        </div>
+      </aside>
+
+      {/* --- Main Content Area (右侧主内容区) --- */}
+      <main className="flex-1 flex flex-col">
+        {/* Top Header */}
+        <header className="bg-white/80 backdrop-blur-sm p-6 flex items-center justify-between border-b border-gray-100 sticky top-0 z-10">
+          <div className="relative w-full max-w-md">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+            <input type="search" placeholder="Search courses, assignments..." className="w-full pl-12 pr-4 py-3 bg-gray-50 rounded-xl border border-gray-100 focus:ring-2 focus:ring-blue-200 outline-none transition" />
+          </div>
+          <div className="flex items-center gap-4">
+            <button className="p-3 bg-gray-50 hover:bg-gray-100 rounded-full text-gray-500 transition relative">
+              <Bell size={20} />
+              <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+            <div className="h-10 w-px bg-gray-100"></div>
+            <p className="font-medium text-sm text-edu-primary">{studentInfo.university}</p>
+          </div>
+        </header>
+
+        {/* Page Content */}
+        <div className="flex-1 p-8 md:p-10 space-y-8">
+          <header className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-500 mb-1">Academic Dashboard</p>
+              <h1 className="text-3xl font-extrabold tracking-tight">{activePage}</h1>
+            </div>
+            {activePage === 'Assignments' && (
+              <button className="px-5 py-3 bg-edu-secondary text-white rounded-xl font-medium text-sm hover:bg-emerald-600 transition shadow-sm">+ Add Assignment</button>
+            )}
+          </header>
+
+          {renderContent()}
+        </div>
+      </main>
+    </div>
+  )
+}
+
+export default App
